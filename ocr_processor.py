@@ -5,7 +5,7 @@ from typing import Optional, Dict, Any, List
 import os
 
 class OCRProcessor:
-    def __init__(self, model_name: str = "llama3.2-vision:11b"):
+    def __init__(self, model_name: str):
         self.model = OllamaLLM(model=model_name)
 
     def process_image(self, image_path: str, format_type: str = "markdown") -> str:
