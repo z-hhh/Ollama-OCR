@@ -1,0 +1,6 @@
+langchain
+Pillow
+requests
+python-magic
+transformers
+streamlit
