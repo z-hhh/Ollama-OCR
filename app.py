@@ -43,7 +43,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 def get_available_models():
-    return ["llama3.2-vision:11b"]
+    return ["llava:7b","llama3.2-vision:11b"]
 
 def main():
     st.title("🔍 Vision OCR Lab")
