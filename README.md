@@ -140,6 +140,7 @@ OCR-Powerd-By-Ollama-Model/
 
 ### Input Image
 ![Output](output\image.png)
+
 ![Markdown](output\markdown.png)
 
 ## 🤝 Contributing
