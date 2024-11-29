@@ -144,7 +144,7 @@ OCR-Powerd-By-Ollama-Model/
 
 ![Output](output/image.png)
 
-
+ 
 
 ![Markdown](output/markdown.png)
 
