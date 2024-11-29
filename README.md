@@ -1,4 +1,4 @@
-# Vision OCR Lab with Ollama Models 🔍
+# Ollama OCR 🔍
 
 A powerful OCR (Optical Character Recognition) application that uses state-of-the-art vision language models through Ollama to extract text from images. Built with Streamlit for a modern, user-friendly interface.
 
