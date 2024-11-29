@@ -139,9 +139,9 @@ OCR-Powerd-By-Ollama-Model/
 ## 📸 Sample Outputs
 
 ### Input Image
-![Output](output\image.png)
+![Output](output/image.png)
 
-![Markdown](output\markdown.png)
+![Markdown](output/markdown.png)
 
 ## 🤝 Contributing
 
