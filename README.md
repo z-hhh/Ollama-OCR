@@ -38,7 +38,7 @@ ollama pull llama3.2-vision:11b
 1. Clone the repository:
 ```bash
 git clone https://github.com/imanoop7/Ollama-OCR.git
-cd OCR-Powerd-By-Ollama-Model
+cd Ollama-OCR
 ```
 
 2. Install the required Python packages:
@@ -144,8 +144,3 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 🙏 Acknowledgments
-
-- [Ollama](https://ollama.ai/) for providing the vision models
-- [Streamlit](https://streamlit.io/) for the amazing UI framework
-- [LangChain](https://python.langchain.com/) for inspiration
