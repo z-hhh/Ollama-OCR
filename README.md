@@ -5,7 +5,7 @@ A powerful OCR (Optical Character Recognition) application that uses state-of-th
 ## 🌟 Features
 
 - **Multiple Vision Models Support**
-  - LLaVA 7B: Efficient vision-language model for real-time processing
+  - LLaVA 7B: Efficient vision-language model for real-time processing (LLaVa model can generate wrong output sometimes)
   - Llama 3.2 Vision: Advanced model with high accuracy for complex documents
 
 - **Multiple Output Formats**
