@@ -136,10 +136,15 @@ OCR-Powerd-By-Ollama-Model/
    - Labeled data pairs
    - Clear key-value separation
 
+## 📸 Input Image
+
+![Input](input/img.png)
+
 ## 📸 Sample Outputs
 
-### Input Image
 ![Output](output/image.png)
+
+
 
 ![Markdown](output/markdown.png)
 
