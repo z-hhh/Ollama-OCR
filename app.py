@@ -39,11 +39,15 @@ st.markdown("""
         border-radius: 10px;
         background-color: #ffffff;
     }
+    .stImage {
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
     </style>
     """, unsafe_allow_html=True)
 
 def get_available_models():
-    return ["llava:7b","llama3.2-vision:11b"]
+    return ["llava:7b", "llama3.2-vision:11b"]
 
 def main():
     st.title("🔍 Vision OCR Lab")
@@ -93,7 +97,8 @@ def main():
             with col1:
                 st.subheader("📸 Input Image")
                 image = Image.open(uploaded_file)
-                st.image(image, use_column_width=True)
+                # Using use_container_width instead of deprecated use_column_width
+                st.image(image, use_container_width=True, caption="Input Image")
                 
                 with st.expander("📋 Image Details", expanded=True):
                     st.markdown(f"""
@@ -111,19 +116,26 @@ def main():
                     try:
                         result = processor.process_image(temp_path, format_type)
                         
-                        if format_type == "markdown":
-                            st.markdown(result)
-                        elif format_type == "json":
-                            st.json(result)
-                        else:
-                            st.text_area("", value=result, height=400)
+                        # Create a container for the result
+                        with st.container():
+                            if format_type == "markdown":
+                                st.markdown(result)
+                            elif format_type == "json":
+                                st.json(result)
+                            else:
+                                st.text_area("", value=result, height=400)
                         
-                        st.download_button(
-                            label="📥 Download Extracted Text",
-                            data=result,
-                            file_name=f"extracted_text_{format_type}.txt",
-                            mime="text/plain",
-                        )
+                        # Add some spacing
+                        st.markdown("<br>", unsafe_allow_html=True)
+                        
+                        # Download button in a container
+                        with st.container():
+                            st.download_button(
+                                label="📥 Download Extracted Text",
+                                data=result,
+                                file_name=f"extracted_text_{format_type}.txt",
+                                mime="text/plain",
+                            )
                     finally:
                         os.unlink(temp_path)
         else:
