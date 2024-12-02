@@ -1,6 +1,10 @@
+<a href="https://github.com/imanoop7/Ollama-OCR"><img src="https://img.shields.io/github/stars/imanoop7/Ollama-OCR.svg?style=social&label=Star" alt="Stargazers"></a>
+<a href="https://github.com/imanoop7/Ollama-OCR/graphs/commit-activity"><img src="https://img.shields.io/github/commit-activity/m/imanoop7/Ollama-OCR.svg" alt="Commit Activity"></a>
+<a href="https://github.com/imanoop7/Ollama-OCR"><img src="https://img.shields.io/github/last-commit/imanoop7/Ollama-OCR.svg" alt="Last Commit"></a>
+<a href="https://github.com/imanoop7/Ollama-OCR/graphs/contributors"><img src="https://img.shields.io/github/contributors-anon/imanoop7/Ollama-OCR.svg" alt="Contributors"></a>
 # Ollama OCR 🔍
 
-A powerful OCR (Optical Character Recognition) application that uses state-of-the-art vision language models through Ollama to extract text from images. Built with Streamlit for a modern, user-friendly interface.
+A powerful OCR (Optical Character Recognition) package that uses state-of-the-art vision language models through Ollama to extract text from images. Available both as a Python package and a Streamlit web application.
 
 ## 🌟 Features
 
@@ -22,137 +26,83 @@ A powerful OCR (Optical Character Recognition) application that uses state-of-th
   - Image preview with details
   - Responsive design
 
-## 🚀 Getting Started
 
-### Prerequisites
+## 📦 Package Installation
 
-1. Install [Ollama](https://ollama.ai/)
-2. Pull the required models:
 ```bash
-ollama pull llava:7b
-ollama pull llama3.2-vision:11b
+pip install ollama-ocr
 ```
 
-### Installation
+## 🚀 Quick Start
+### Prerequisites
+1. Install Ollama
+2. Pull the required model:
+
+```bash
+ollama pull llama3.2-vision:11b
+```
+## Using the Package
+
+```python
+from ollama_ocr import OCRProcessor
+
+# Initialize OCR processor
+ocr = OCRProcessor(model_name='llama3.2-vision:11b')  # You can use any vision model available on Ollama
+
+# Process an image
+result = ocr.process_image(
+    image_path="path/to/your/image.png",
+    format_type="markdown"  # Options: markdown, text, json, structured, key_value
+)
+print(result)
+```
+## 📋 Output Format Details
+
+1. **Markdown Format**: The output is a markdown string containing the extracted text from the image.
+2. **Text Format**: The output is a plain text string containing the extracted text from the image.
+3. **JSON Format**: The output is a JSON object containing the extracted text from the image.
+4. **Structured Format**: The output is a structured object containing the extracted text from the image.
+5. **Key-Value Format**: The output is a dictionary containing the extracted text from the image.  
+
+-----
+## 🌐 Streamlit Web Application
 
 1. Clone the repository:
 ```bash
 git clone https://github.com/imanoop7/Ollama-OCR.git
 cd Ollama-OCR
 ```
-
-2. Install the required Python packages:
+2. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
-
-### Running the Application
-
-1. Start the Ollama server (make sure it's running)
-2. Run the Streamlit app:
+2. Go to the directory where app.py is located:
+```bash
+cd src      
+```
+3. Run the Streamlit app:
 ```bash
 streamlit run app.py
 ```
+## Examples Output
+### Input Image
+![Input Image](input/img.png)
 
-## 💡 Usage Guide
 
-1. **Select Vision Model**
-   - Choose between LLaVA 7B (faster) or Llama 3.2 Vision (more accurate)
-   - Each model has its strengths for different types of images
+### Sample Output
+![Sample Output](output/image.png)
+![Sample Output](output/markdown.png)
 
-2. **Choose Output Format**
-   - Markdown: Best for documents with headers and lists
-   - Text: Simple text extraction
-   - JSON: Structured data output
-   - Structured: For tables and organized content
-   - Key-Value: For forms and labeled data
 
-3. **Upload Image**
-   - Drag and drop or click to upload
-   - Supported formats: PNG, JPG, JPEG, TIFF, BMP
-
-4. **View Results**
-   - See the extracted text in your chosen format
-   - Download the results as a text file
-
-## 🛠️ Technical Details
-
-### Architecture
-
-- **Frontend**: Streamlit
-- **Backend**: Python
-- **Vision Models**: Ollama API
-- **Image Processing**: PIL (Python Imaging Library)
-
-### File Structure
-
-```
-OCR-Powerd-By-Ollama-Model/
-├── app.py              # Streamlit UI and main application
-├── ocr_processor.py    # OCR processing logic and model interaction
-├── requirements.txt    # Python dependencies
-└── README.md          # Documentation
-```
-
-### Key Components
-
-1. **OCR Processor**
-   - Handles image encoding
-   - Manages model communication
-   - Processes different output formats
-   - Error handling and response formatting
-
-2. **Streamlit Interface**
-   - Responsive UI components
-   - Real-time processing
-   - File handling
-   - Result display and formatting
-
-## 📋 Output Format Details
-
-1. **Markdown Format**
-   - Headers for titles and sections
-   - Bullet points for lists
-   - Proper markdown syntax
-   - Preserved text hierarchy
-
-2. **Plain Text**
-   - Original layout preservation
-   - Line breaks maintained
-   - Raw text content
-
-3. **JSON Format**
-   - Structured data output
-   - Hierarchical organization
-   - Machine-readable format
-
-4. **Structured Format**
-   - Table extraction
-   - List formatting
-   - Section organization
-
-5. **Key-Value Format**
-   - Form field extraction
-   - Labeled data pairs
-   - Clear key-value separation
-
-## 📸 Input Image
-
-![Input](input/img.png)
-
-## 📸 Sample Outputs
-
-![Output](output/image.png)
-
- 
-
-![Markdown](output/markdown.png)
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## 📝 License
-
+## 📄 License
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🙏 Acknowledgments
+Built with Ollama
+Powered by LLaMA Vision Models
+
+
+## GitHub Stars Graph
+[![Stargazers over time](https://starchart.cc/imanoop7/Ollama-OCR.svg)](https://starchart.cc/imanoop7/Ollama-OCR)
+
 
