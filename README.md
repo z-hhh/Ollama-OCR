@@ -102,7 +102,7 @@ Built with Ollama
 Powered by LLaMA Vision Models
 
 
-## GitHub Stars Graph
-[![Stargazers over time](https://starchart.cc/imanoop7/Ollama-OCR.svg)](https://starchart.cc/imanoop7/Ollama-OCR)
+## Star History
 
+[![Star History Chart](https://api.star-history.com/svg?repos=imanoop7/Ollama-OCR&type=Date)](https://star-history.com/#imanoop7/Ollama-OCR&Date)
 
