@@ -84,6 +84,7 @@ print("\nProcessing Statistics:")
 print(f"Total images: {batch_results['statistics']['total']}")
 print(f"Successfully processed: {batch_results['statistics']['successful']}")
 print(f"Failed: {batch_results['statistics']['failed']}")
+```
 
 
 ## 📋 Output Format Details
