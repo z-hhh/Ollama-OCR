@@ -4,3 +4,7 @@ requests
 python-magic
 transformers
 streamlit
+tqdm
+opencv-python
+pdf2image
+numpy
