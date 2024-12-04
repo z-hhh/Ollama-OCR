@@ -7,7 +7,7 @@ with io.open("README.md", encoding="utf-8") as f:
 
 setup(
     name="ollama-ocr",
-    version="0.1.2",
+    version="0.1.3",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     install_requires=[
@@ -15,7 +15,11 @@ setup(
         "Pillow>=10.0.0",
         "requests>=2.25.0",
         "python-magic>=0.4.0",
-        "transformers>=4.0.0"
+        "transformers>=4.0.0",
+        "tqdm>=4.65.0",
+        "opencv-python>=4.8.0",
+        "pdf2image>=1.16.3",
+        "numpy>=1.24.0"
     ],
     author="Anoop Maurya",
     author_email="mauryaanoop3@gmail.com",
