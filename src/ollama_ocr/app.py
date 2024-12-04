@@ -3,6 +3,7 @@ from .ocr_processor import OCRProcessor
 import tempfile
 import os
 from PIL import Image
+import json
 
 # Page configuration
 st.set_page_config(
@@ -43,11 +44,47 @@ st.markdown("""
         border-radius: 10px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
+    .gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+        padding: 1rem;
+    }
+    .gallery-item {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 0.5rem;
+        background: white;
+    }
     </style>
     """, unsafe_allow_html=True)
 
 def get_available_models():
     return ["llava:7b", "llama3.2-vision:11b"]
+
+def process_single_image(processor, image_path, format_type, enable_preprocessing):
+    """Process a single image and return the result"""
+    try:
+        result = processor.process_image(
+            image_path=image_path,
+            format_type=format_type,
+            preprocess=enable_preprocessing
+        )
+        return result
+    except Exception as e:
+        return f"Error processing image: {str(e)}"
+
+def process_batch_images(processor, image_paths, format_type, enable_preprocessing):
+    """Process multiple images and return results"""
+    try:
+        results = processor.process_batch(
+            input_path=image_paths,
+            format_type=format_type,
+            preprocess=enable_preprocessing
+        )
+        return results
+    except Exception as e:
+        return {"error": str(e)}
 
 def main():
     st.title("🔍 Vision OCR Lab")
@@ -68,6 +105,20 @@ def main():
             ["markdown", "text", "json", "structured", "key_value"],
             help="Choose how you want the extracted text to be formatted"
         )
+
+        max_workers = st.slider(
+            "🔄 Parallel Processing",
+            min_value=1,
+            max_value=8,
+            value=2,
+            help="Number of images to process in parallel (for batch processing)"
+        )
+
+        enable_preprocessing = st.checkbox(
+            "🔍 Enable Preprocessing",
+            value=True,
+            help="Apply image enhancement and preprocessing"
+        )
         
         st.markdown("---")
         
@@ -78,114 +129,118 @@ def main():
             st.info("Llama 3.2 Vision: Advanced model with high accuracy for complex text extraction")
 
     # Initialize OCR Processor
-    processor = OCRProcessor(model_name=selected_model)
+    processor = OCRProcessor(model_name=selected_model, max_workers=max_workers)
 
     # Main content area with tabs
     tab1, tab2 = st.tabs(["📸 Image Processing", "ℹ️ About"])
     
     with tab1:
-        # File upload area
-        uploaded_file = st.file_uploader(
-            "Drop your image here",
-            type=['png', 'jpg', 'jpeg', 'tiff', 'bmp'],
-            help="Supported formats: PNG, JPG, JPEG, TIFF, BMP"
+        # File upload area with multiple file support
+        uploaded_files = st.file_uploader(
+            "Drop your images here",
+            type=['png', 'jpg', 'jpeg', 'tiff', 'bmp', 'pdf'],
+            accept_multiple_files=True,
+            help="Supported formats: PNG, JPG, JPEG, TIFF, BMP, PDF"
         )
 
-        if uploaded_file is not None:
-            col1, col2 = st.columns([1, 1])
-            
-            with col1:
-                st.subheader("📸 Input Image")
-                image = Image.open(uploaded_file)
-                # Using use_container_width instead of deprecated use_column_width
-                st.image(image, use_container_width=True, caption="Input Image")
+        if uploaded_files:
+            # Create a temporary directory for uploaded files
+            with tempfile.TemporaryDirectory() as temp_dir:
+                image_paths = []
                 
-                with st.expander("📋 Image Details", expanded=True):
-                    st.markdown(f"""
-                        - **Size**: {image.size}
-                        - **Format**: {image.format}
-                    """)
+                # Save uploaded files and collect paths
+                for uploaded_file in uploaded_files:
+                    temp_path = os.path.join(temp_dir, uploaded_file.name)
+                    with open(temp_path, "wb") as f:
+                        f.write(uploaded_file.getvalue())
+                    image_paths.append(temp_path)
 
-            with col2:
-                st.subheader("📝 Extracted Text")
-                with st.spinner(f"✨ Magic happening with {selected_model}..."):
-                    with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(uploaded_file.name)[1]) as tmp_file:
-                        tmp_file.write(uploaded_file.getvalue())
-                        temp_path = tmp_file.name
+                # Display images in a gallery
+                st.subheader(f"📸 Input Images ({len(uploaded_files)} files)")
+                cols = st.columns(min(len(uploaded_files), 4))
+                for idx, uploaded_file in enumerate(uploaded_files):
+                    with cols[idx % 4]:
+                        image = Image.open(uploaded_file)
+                        st.image(image, use_container_width=True, caption=uploaded_file.name)
 
-                    try:
-                        result = processor.process_image(temp_path, format_type)
-                        
-                        # Create a container for the result
-                        with st.container():
-                            if format_type == "markdown":
-                                st.markdown(result)
-                            elif format_type == "json":
-                                st.json(result)
-                            else:
-                                st.text_area("", value=result, height=400)
-                        
-                        # Add some spacing
-                        st.markdown("<br>", unsafe_allow_html=True)
-                        
-                        # Download button in a container
-                        with st.container():
-                            st.download_button(
-                                label="📥 Download Extracted Text",
-                                data=result,
-                                file_name=f"extracted_text_{format_type}.txt",
-                                mime="text/plain",
+                # Process button
+                if st.button("🚀 Process Images"):
+                    with st.spinner("Processing images..."):
+                        if len(image_paths) == 1:
+                            # Single image processing
+                            result = process_single_image(
+                                processor, 
+                                image_paths[0], 
+                                format_type,
+                                enable_preprocessing
                             )
-                    finally:
-                        os.unlink(temp_path)
-        else:
-            st.markdown("""
-                <div class='upload-text'>
-                    <h3>👆 Upload an Image to Start</h3>
-                    <p style='color: #666;'>Drag and drop your image here or click to browse</p>
-                </div>
-                """, unsafe_allow_html=True)
-    
+                            st.subheader("📝 Extracted Text")
+                            st.markdown(result)
+                            
+                            # Download button for single result
+                            st.download_button(
+                                "📥 Download Result",
+                                result,
+                                file_name=f"ocr_result.{format_type}",
+                                mime="text/plain"
+                            )
+                        else:
+                            # Batch processing
+                            results = process_batch_images(
+                                processor,
+                                image_paths,
+                                format_type,
+                                enable_preprocessing
+                            )
+                            
+                            # Display statistics
+                            st.subheader("📊 Processing Statistics")
+                            col1, col2, col3 = st.columns(3)
+                            with col1:
+                                st.metric("Total Images", results['statistics']['total'])
+                            with col2:
+                                st.metric("Successful", results['statistics']['successful'])
+                            with col3:
+                                st.metric("Failed", results['statistics']['failed'])
+
+                            # Display results
+                            st.subheader("📝 Extracted Text")
+                            for file_path, text in results['results'].items():
+                                with st.expander(f"Result: {os.path.basename(file_path)}"):
+                                    st.markdown(text)
+
+                            # Display errors if any
+                            if results['errors']:
+                                st.error("⚠️ Some files had errors:")
+                                for file_path, error in results['errors'].items():
+                                    st.warning(f"{os.path.basename(file_path)}: {error}")
+
+                            # Download all results as JSON
+                            if st.button("📥 Download All Results"):
+                                json_results = json.dumps(results, indent=2)
+                                st.download_button(
+                                    "📥 Download Results JSON",
+                                    json_results,
+                                    file_name="ocr_results.json",
+                                    mime="application/json"
+                                )
+
     with tab2:
-        st.markdown("## About Vision OCR Lab")
-        st.write("Extract text from images using state-of-the-art vision models:")
-        
-        st.markdown("### Available Models")
-        
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            st.markdown("#### LLaVA 7B")
-            st.markdown("""
-            - Efficient vision-language model
-            - Optimized for real-time processing
-            - Good for general text extraction
-            """)
-            
-        with col2:
-            st.markdown("#### Llama 3.2 Vision")
-            st.markdown("""
-            - Advanced vision capabilities
-            - High accuracy for complex documents
-            - Better at handling structured content
-            """)
-        
-        st.markdown("### Output Formats")
+        st.header("About Vision OCR Lab")
         st.markdown("""
-        - **Markdown**: Preserves text formatting with headers and lists
-        - **Text**: Clean, plain text output
-        - **JSON**: Structured data in JSON format
-        - **Structured**: Organized tables and lists
-        - **Key-Value**: Extracts paired information
-        """)
+        This application uses state-of-the-art vision language models through Ollama to extract text from images.
         
-        st.markdown("---")
+        ### Features:
+        - 🖼️ Support for multiple image formats
+        - 📦 Batch processing capability
+        - 🔄 Parallel processing
+        - 🔍 Image preprocessing and enhancement
+        - 📊 Multiple output formats
+        - 📥 Easy result download
         
-        st.markdown("### 💡 Tips")
-        st.info("""
-        - Use Markdown format for well-structured documents
-        - JSON format works best for data extraction
-        - Key-Value is ideal for forms and labeled content
+        ### Models:
+        - **LLaVA 7B**: Efficient vision-language model for real-time processing
+        - **Llama 3.2 Vision**: Advanced model with high accuracy for complex documents
         """)
 
 if __name__ == "__main__":

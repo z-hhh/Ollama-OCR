@@ -43,6 +43,8 @@ ollama pull llama3.2-vision:11b
 ```
 ## Using the Package
 
+### Single Image Processing
+
 ```python
 from ollama_ocr import OCRProcessor
 
@@ -56,6 +58,34 @@ result = ocr.process_image(
 )
 print(result)
 ```
+### Batch Processing (New! 🆕)
+
+```python
+from ollama_ocr import OCRProcessor
+
+# Initialize OCR processor
+ocr = OCRProcessor(model_name='llama3.2-vision:11b', max_workers=4)  # max workers for parallel processing
+
+# Process multiple images
+# Process multiple images with progress tracking
+batch_results = ocr.process_batch(
+    input_path="path/to/images/folder",  # Directory or list of image paths
+    format_type="markdown",
+    recursive=True,  # Search subdirectories
+    preprocess=True  # Enable image preprocessing
+)
+# Access results
+for file_path, text in batch_results['results'].items():
+    print(f"\nFile: {file_path}")
+    print(f"Extracted Text: {text}")
+
+# View statistics
+print("\nProcessing Statistics:")
+print(f"Total images: {batch_results['statistics']['total']}")
+print(f"Successfully processed: {batch_results['statistics']['successful']}")
+print(f"Failed: {batch_results['statistics']['failed']}")
+
+
 ## 📋 Output Format Details
 
 1. **Markdown Format**: The output is a markdown string containing the extracted text from the image.
@@ -65,7 +95,7 @@ print(result)
 5. **Key-Value Format**: The output is a dictionary containing the extracted text from the image.  
 
 -----
-## 🌐 Streamlit Web Application
+## 🌐 Streamlit Web Application(supports batch processing)
 
 1. Clone the repository:
 ```bash
