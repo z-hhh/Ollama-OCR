@@ -19,12 +19,6 @@ A powerful OCR (Optical Character Recognition) package that uses state-of-the-ar
   - Structured: Tables and organized data
   - Key-Value Pairs: Extracts labeled information
 
-- **User-Friendly Interface**
-  - Drag-and-drop image upload
-  - Real-time processing
-  - Download extracted text
-  - Image preview with details
-  - Responsive design
 
 
 ## 📦 Package Installation
