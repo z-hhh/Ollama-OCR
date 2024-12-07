@@ -19,6 +19,10 @@ A powerful OCR (Optical Character Recognition) package that uses state-of-the-ar
   - Structured: Tables and organized data
   - Key-Value Pairs: Extracts labeled information
 
+- **Batch Processing**
+  - Process multiple images in parallel
+  - Progress tracking for each image
+  - Image preprocessing (resize, normalize, etc.)
 
 
 ## 📦 Package Installation
@@ -81,6 +85,7 @@ print(f"Failed: {batch_results['statistics']['failed']}")
 ```
 
 
+
 ## 📋 Output Format Details
 
 1. **Markdown Format**: The output is a markdown string containing the extracted text from the image.
@@ -91,6 +96,12 @@ print(f"Failed: {batch_results['statistics']['failed']}")
 
 -----
 ## 🌐 Streamlit Web Application(supports batch processing)
+- **User-Friendly Interface**
+  - Drag-and-drop image upload
+  - Real-time processing
+  - Download extracted text
+  - Image preview with details
+  - Responsive design
 
 1. Clone the repository:
 ```bash
@@ -109,6 +120,8 @@ cd src
 ```bash
 streamlit run app.py
 ```
+
+
 ## Examples Output
 ### Input Image
 ![Input Image](input/img.png)
