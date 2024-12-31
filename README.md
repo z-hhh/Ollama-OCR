@@ -114,7 +114,7 @@ pip install -r requirements.txt
 ```
 2. Go to the directory where app.py is located:
 ```bash
-cd src      
+cd src/ollama_ocr      
 ```
 3. Run the Streamlit app:
 ```bash
