@@ -9,9 +9,12 @@ from pathlib import Path
 import cv2
 from pdf2image import convert_from_path
 
+# 从环境变量中读取 base_url，如果没有设置则使用默认值
+base_url: str = os.getenv("BASE_URL", "http://localhost:11434/api/generate")
+
 class OCRProcessor:
     def __init__(self, model_name: str = "llama3.2-vision:11b", 
-                 base_url: str = "http://localhost:11434/api/generate",
+                 base_url: str = base_url,
                  max_workers: int = 1):
         
         self.model_name = model_name
